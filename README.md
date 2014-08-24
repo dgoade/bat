@@ -10,7 +10,10 @@ utils.sh
 The lib/utils.sh is the lowest-level library with full
 documentation written in Perl POD. For convenience, I 
 have included a copy of the html that can be generated
-from this library with the pod2html command.  
+from this library with the pod2html command. You should
+be able to preview the document here:
+
+http://htmlpreview.github.io/?https://github.com/dgoade/bat/blob/master/doc/utils.html 
 
 logger.sh
 ---------
