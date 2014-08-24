@@ -1,0 +1,1268 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>utils.sh - Low-level Bash Utility Functions</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:root@localhost" />
+</head>
+
+<body style="background-color: white">
+
+<p><a name="__index__"></a></p>
+<!-- INDEX BEGIN -->
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#global_variables">GLOBAL VARIABLES</a></li>
+	</ul>
+
+	<li><a href="#functions">FUNCTIONS</a></li>
+	<ul>
+
+		<li><a href="#utils_callstack__start__"><strong>utils_callStack(<em>[start]</em>)</strong></a></li>
+		<li><a href="#utils_trace_on__"><strong>utils_trace_on()</strong></a></li>
+		<li><a href="#utils_trace_off__"><strong>utils_trace_off()</strong></a></li>
+		<li><a href="#utils_stacktrace__"><strong>utils_stacktrace()</strong></a></li>
+		<li><a href="#utils_debugme__commands_____"><strong>utils_debugme([<em>commands...</em>])</strong></a></li>
+		<li><a href="#utils_lower_text_"><strong>utils_lower(<em>text</em>)</strong></a></li>
+		<li><a href="#utils_upper_text_"><strong>utils_upper(<em>text</em>)</strong></a></li>
+		<li><a href="#utils_logmsg_msgloglevel__msg_"><strong>utils_logMsg(<em>msgLogLevel, msg</em>)</strong></a></li>
+		<li><a href="#utils_logit_msgloglevel__msg_"><strong>utils_logit(<em>msgLogLevel, msg</em>)</strong></a></li>
+		<li><a href="#utils_sha1sum_filename_"><strong>utils_sha1sum(<em>fileName</em>)</strong></a></li>
+		<li><a href="#utils_elogit_msgtype__datetime__hostname__msg__eventlog_"><strong>utils_eLogit(<em>msgType, dateTime, hostName, msg, eventLog</em>)</strong></a></li>
+		<li><a href="#utils_quotesafeeval_lval__rval_"><strong>utils_quoteSafeEval(<em>lval, rval</em>)</strong></a></li>
+		<li><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__"><strong>utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</strong></a></li>
+		<li><a href="#utils_flushlogq_funcname_"><strong>utils_flushLogQ(<em>funcName</em>)</strong></a></li>
+		<li><a href="#utils_qmsgsfrom_funcname__flushq_"><strong>utils_qMsgsFrom(<em>funcName, flushQ</em>)</strong></a></li>
+		<li><a href="#utils_exec_command__sterr_file_"><strong>utils_exec(<em>command, sterr_file</em>)</strong></a></li>
+		<li><a href="#utils_filereadable_path_"><strong>utils_fileReadable(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_filewriteable_path_"><strong>utils_fileWriteable(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_canwriteorcreatefile_path_"><strong>utils_canWriteOrCreateFile(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_fileexecutable_path_"><strong>utils_fileExecutable(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_dirready_path_"><strong>utils_dirReady(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_workfilenamesameext_basisname__surname__workdir_"><strong>utils_workFileNameSameExt(<em>basisName, surname, workDir</em>)</strong></a></li>
+		<li><a href="#utils_workfilenamedifferentext_basisname__ext__workdir_"><strong>utils_workFileNameDifferentExt(<em>basisName, ext, workDir</em>)</strong></a></li>
+		<li><a href="#utils_replacedirname_pathname__dirname_"><strong>utils_replaceDirName(<em>pathName, dirName</em>)</strong></a></li>
+		<li><a href="#utils_samenamedifferentext__path____newext__"><strong>utils_sameNameDifferentExt(<em>[path], [newExt]</em>)</strong></a></li>
+		<li><a href="#utils_similarnamesameext_srcname__surname_"><strong>utils_similarNameSameExt(<em>srcName, surname</em>)</strong></a></li>
+		<li><a href="#utils_pathwithoutext_path_"><strong>utils_pathWithoutExt(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_filenamewithoutext_path_"><strong>utils_fileNameWithoutExt(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_fileext_path_"><strong>utils_fileExt(<em>path</em>)</strong></a></li>
+		<li><a href="#utils_copyfiles_src__dest__includes_"><strong>utils_copyFiles(<em>src, dest, includes</em>)</strong></a></li>
+		<li><a href="#utils_rotate_filetorotate__max__separator_"><strong>utils_rotate(<em>fileToRotate, max, separator</em>)</strong></a></li>
+		<li><a href="#utils_includesource_file_"><strong>utils_includeSource(<em>file</em>)</strong></a></li>
+		<li><a href="#utils_loadconfig_filename_"><strong>utils_loadConfig(<em>fileName</em>)</strong></a></li>
+		<li><a href="#utils_true_expr_"><strong>utils_true(<em>expr</em>)</strong></a></li>
+		<li><a href="#utils_false_expr_"><strong>utils_false(<em>expr</em>)</strong></a></li>
+		<li><a href="#utils_execsed_sed_com__sed_script__input_file___output_file__"><strong>utils_execsed(<em>sed_com, sed_script, input_file[, output_file]</em>)</strong></a></li>
+		<li><a href="#utils_runsed_sed_script__input_file___output_file__"><strong>utils_runsed(<em>sed_script, input_file[, output_file]</em>)</strong></a></li>
+		<li><a href="#utils_gensed_sed_script__input_file___output_file__"><strong>utils_gensed(<em>sed_script, input_file[, output_file]</em>)</strong></a></li>
+		<li><a href="#__utils_versionwalk_rv__tv__ndx_"><strong>__utils_versionWalk(<em>rv, tv, ndx</em>)</strong></a></li>
+		<li><a href="#utils_versionsupported_fullrequiresv__fulltestv_"><strong>utils_versionSupported(<em>fullRequiresV, fullTestV</em>)</strong></a></li>
+	</ul>
+
+</ul>
+<!-- INDEX END -->
+
+<hr />
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>utils.sh - Low-level Bash Utility Functions</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    #!/bin/bash
+    source $(dirname $0)./utils.sh
+    # start using any of the functions</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p><strong>utils.sh</strong> is a self-contained Bash function library containing <em>low-level</em> 
+utility functions. By <em>low-level</em>, I mean this library does not have any 
+dependencies on other script libraries. This is intended to be the home for 
+the most commonly-used functions by your script. All you should have to do is 
+source this library into your script and all of the below functions should be 
+available.</p>
+<p>
+</p>
+<h2><a name="global_variables">GLOBAL VARIABLES</a></h2>
+<p><em>Integers</em> representing log levels for messages, 0-5 respectively.</p>
+<dl>
+<dt><strong><a name="item_utils_qlog_debug"><em>UTILS_QLOG_DEBUG</em></a></strong>
+
+<dt><strong><a name="item_utils_qlog_info"><em>UTILS_QLOG_INFO</em></a></strong>
+
+<dt><strong><a name="item_utils_qlog_warn"><em>UTILS_QLOG_WARN</em></a></strong>
+
+<dt><strong><a name="item_utils_qlog_error"><em>UTILS_QLOG_ERROR</em></a></strong>
+
+<dt><strong><a name="item_utils_qlog_critical"><em>UTILS_QLOG_CRITICAL</em></a></strong>
+
+<dt><strong><a name="item_utils_qlog_fatal"><em>UTILS_QLOG_FATAL</em></a></strong>
+
+</dl>
+<dl>
+<dt><strong><a name="item_utils_qlogmsg_queues_enabled__2d_boolean_switch_to"><em>UTILS_QLOGMSG_QUEUES_ENABLED</em> - <em>boolean</em> switch to disable all 
+message queueing functionality, including functions that might even result
+in a no-op because UTILS_LOGMSG_QUEUE_MESSAGES is not true.</a></strong>
+
+<dt><strong><a name="item_utils_logmsg_queue_messages__2d_boolean_switch_to_"><em>UTILS_LOGMSG_QUEUE_MESSAGES</em> - <em>boolean</em> switch to control 
+whether or not to queue log messages. Does not completely disable 
+all message queueing functions so some evals might still be executed 
+that should result in a no-op even if this switch is false. 
+<a href="#utils_logmsg_queue_messages">UTILS_LOGMSG_QUEUE_MESSAGES</a> must also be true or this value
+is ignored.</a></strong>
+
+<dt><strong><a name="item_utils_logit_log_level__2d_integer_for_global_log_l"><em>UTILS_LOGIT_LOG_LEVEL</em> - <em>Integer</em> for global log level for the 
+native utils logging functions. A value from 0-5, with 0 being the most
+verbose and 5 being the least.</a></strong>
+
+<dt><strong><a name="item_utils_logit_log_file__2d_string_for_the_log_file_n"><em>UTILS_LOGIT_LOG_FILE</em> - <em>String</em> for the log file name for the
+native utils logging functions to use, if any. Defaults to /dev/null.</a></strong>
+
+<dt><strong><a name="item_utils_logit_log_date_format__2d_string_the_date_fo"><em>UTILS_LOGIT_LOG_DATE_FORMAT</em> - <em>String</em> The date format string. See
+the man page for the date command for more.</a></strong>
+
+</dl>
+<dl>
+<dt><strong><a name="item_utils_debugme"><em>UTILS_DEBUGME</em></a></strong>
+
+</dl>
+<p>Debugging command toggle switch -- see 
+<a href="#utils_debugme__commands_____">utils_debugme([<em>commands...</em>])</a> for more.</p>
+<p>
+</p>
+<hr />
+<h1><a name="functions">FUNCTIONS</a></h1>
+<p><strong>utils.sh</strong> provides the following functions:</p>
+<p>
+</p>
+<h2><a name="utils_callstack__start__"><strong>utils_callStack(<em>[start]</em>)</strong></a></h2>
+<p>Debugging and logging tool. Creates a short string, suitable for logging
+that represents the function call stack. Used by utils_logit for native
+logging when log queueing is disabled (i.e. when 
+UTILS_LOGMSG_QUEUE_MESSAGES is not true).</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>start</em> - Where to start in the call stack trace. Defaults to 3 to
+avoid including ``utils_logMsg-&gt;utils_logit'' in the trace because those two
+functions will generally be included in every call when the trace is logged.</p>
+<p><strong>RETURNS:</strong></p>
+<p>A string representing the call stack. For example: 
+<code>main-</code>source-&gt;logger_rotateLogs-&gt;logger_set_L4B_settings-&gt;utils_dirReady&gt;</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_trace_off__">utils_trace_off()</a>, 
+<a href="#utils_stacktrace__">utils_stacktrace()</a>, 
+<a href="#utils_debugme__commands_____">utils_debugme([<em>commands</em>...])</a></p>
+<p>
+</p>
+<h2><a name="utils_trace_on__"><strong>utils_trace_on()</strong></a></h2>
+<p>Debugging tool. Toggle-on Bash x-trace with a special prompt that shows
+the script name, function name and line number along with the output.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p>None</p>
+<p><strong>RETURNS:</strong></p>
+<p>None</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_trace_off__">utils_trace_off()</a>, 
+<a href="#utils_stacktrace__">utils_stacktrace()</a>, 
+<a href="#utils_callstack__start__">utils_callStack(<em>[start]</em>)</a>, 
+<a href="#utils_debugme__commands_____">utils_debugme([<em>commands</em>...])</a></p>
+<p>
+</p>
+<h2><a name="utils_trace_off__"><strong>utils_trace_off()</strong></a></h2>
+<p>Debugging tool. Toggle-off Bash x-trace.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p>None</p>
+<p><strong>RETURNS:</strong></p>
+<p>None</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>Doesn't do anything more that ``set +x'' right now.</p>
+<p><strong>BUGS:</strong></p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_trace_on__">utils_trace_on()</a>, 
+<a href="#utils_stacktrace__">utils_stacktrace()</a>, 
+<a href="#utils_callstack__start__">utils_callStack(<em>[start]</em>)</a>, 
+<a href="#utils_debugme__commands_____">utils_debugme([<em>commands</em>...])</a></p>
+<p>
+</p>
+<h2><a name="utils_stacktrace__"><strong>utils_stacktrace()</strong></a></h2>
+<p>Debugging tool. Print a stack trace of the function call stack.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p>None</p>
+<p><strong>RETURNS:</strong></p>
+<p>None</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_callstack__start__">utils_callStack(<em>[start]</em>)</a>, 
+<a href="#utils_trace_on__">utils_trace_on()</a>, 
+<a href="#utils_trace_off__">utils_trace_off()</a>, 
+<a href="#utils_debugme__commands_____">utils_debugme([<em>commands...</em>])</a></p>
+<p>
+</p>
+<h2><a name="utils_debugme__commands_____"><strong>utils_debugme([<em>commands...</em>])</strong></a></h2>
+<p>Debugging tool. This function does nothing when UTILS_DEBUGME is unset or empty, but it
+executes the given parameters as commands when UTILS_DEBUGME is set.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>commands...</em> - Any number of commands to execute.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - (Always, regardless of result of commands passed.)</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_debugme">UTILS_DEBUGME</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>Always returns 0 so as not to influence anything else with an unwanted <strong>false</strong> return
+code. For example, the script's exit code if this function is used as the very last 
+command in the script.</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_trace_on__">utils_trace_on()</a>, 
+<a href="#utils_trace_off__">utils_trace_off()</a>, 
+<a href="#utils_stacktrace__">utils_stacktrace()</a>, 
+<a href="#utils_callstack__start__">utils_callStack(<em>[start]</em>)</a>,</p>
+<p>
+</p>
+<h2><a name="utils_lower_text_"><strong>utils_lower(<em>text</em>)</strong></a></h2>
+<p>Convert any alphabetic characters to lower-case.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>text</em> - Text to convert to lower-case</p>
+<p><strong>RETURNS:</strong></p>
+<p>echoes the first argument converted to lower-case.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_upper_text_">utils_upper(<em>text</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_upper_text_"><strong>utils_upper(<em>text</em>)</strong></a></h2>
+<p>Convert any alphabetic characters to upper-case.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>text</em> - Text to convert to upper-case</p>
+<p><strong>RETURNS:</strong></p>
+<p>echoes the first argument converted to upper-case.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_lower_text_">utils_lower(<em>text</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_logmsg_msgloglevel__msg_"><strong>utils_logMsg(<em>msgLogLevel, msg</em>)</strong></a></h2>
+<p>A single function for other utils functions to call in order to either queue or echo 
+log messages depending on what the global <strong>UTILS_LOGMSG_QUEUE_MESSAGES</strong> is set to.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>msgLogLevel</em> - Integer representing the message log level</p>
+<p><em>msg</em> - Message to pass to either utils_qLogMsg or utils_logit</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If either downstream logger returns 0</p>
+<p>1 - If either downstream logger returns 1</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#utils_logmsg_queue_messages">UTILS_LOGMSG_QUEUE_MESSAGES</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_logit_msgloglevel__msg_">utils_logit(<em>msgLogLevel, msg</em>)</a>
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>) </a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_logit_msgloglevel__msg_">utils_logit(<em>msgLogLevel, msg</em>)</a>,, 
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_logit_msgloglevel__msg_"><strong>utils_logit(<em>msgLogLevel, msg</em>)</strong></a></h2>
+<p>A simple logging function that can be used to log conditionally by comparing 
+a  passed log level against a global log level and echoing the message if 
+the message level is less than or equal to  the global log level. Includes
+a string representing the call stack.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>msgLogLevel</em> - Integer representing the message log level</p>
+<p><em>msg</em> - Message to echo</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If the message was supposed to be logged and was.</p>
+<p>1 - If the message was supposed to be logged but was not.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#utils_logit_log_level">UTILS_LOGIT_LOG_LEVEL</a></p>
+<p><a href="#utils_logit_log_date_format">UTILS_LOGIT_LOG_DATE_FORMAT</a></p>
+<p><a href="#utils_logit_log_file">UTILS_LOGIT_LOG_FILE</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_lower_i_text__">utils_lower(text)</a>, <a href="#utils_callstack__start__">utils_callStack(<em>[start]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>This is the native logging function used by utils.sh library 
+functions when log queueing is disabled (i.e. when UTILS_LOGMSG_QUEUE_MESSAGES 
+is not true).</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_logmsg_msgloglevel__msg_">utils_logMsg(<em>msgLogLevel, msg</em>)</a>
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+<a href="#utils_callstack__start__">utils_callStack(<em>start</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_sha1sum_filename_"><strong>utils_sha1sum(<em>fileName</em>)</strong></a></h2>
+<p>Get and return the SHA-1 sum of a file.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>fileName</em> - Name of the file to get an SHA-1 sum of</p>
+<p><strong>RETURNS:</strong></p>
+<p>Has both a return value and echoes a string. Check the return value through 
+$? first to be sure that the echoed string was created successfully.</p>
+<p>0 - If getting the SHA-1 value of <em>fileName</em> was successful</p>
+<p>1 - If getting the SHA-1 value <em>fileName</em> failed</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>
+</p>
+<h2><a name="utils_elogit_msgtype__datetime__hostname__msg__eventlog_"><strong>utils_eLogit(<em>msgType, dateTime, hostName, msg, eventLog</em>)</strong></a></h2>
+<p>Another logging function specifically for event logging, mimicking the
+elogging format. The output will always got to stdout and it may also
+be sent to an event log specified in the last parameter.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>msgType</em> - String for the type of message, defaults to MON.</p>
+<p><em>dateTime</em> - A preformatted date time string. Defaults to the current date 
+and time given by the date command formatted ``+%Y-%m-%d %H:%M:%S''.</p>
+<p><em>hostName</em> - The hostname as you wish it to appear. Defaults to the current
+hostname.</p>
+<p><em>msg</em> - The rest of the message to log, formatted as you wish.</p>
+<p><em>eventLog</em> - The path to the event log. Defaults to /dev/null only.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If the message was output</p>
+<p>1 - If the message was not output</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_logmsg_msgloglevel__msg_">utils_logMsg(<em>msgLogLevel, msg</em>)</a>
+<a href="#utils_logit_msgloglevel__msg_">utils_logit(<em>msgLogLevel, msg</em>)</a>
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+<a href="#utils_callstack__start__">utils_callStack(<em>start</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_quotesafeeval_lval__rval_"><strong>utils_quoteSafeEval(<em>lval, rval</em>)</strong></a></h2>
+<p>A helper function for utils_qLogMsg.
+A hackish way to workaround the side-effect that the eval command has of
+removing embedded single quotes from strings. This function uses perl to
+construct an assignment command and then executes it.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>lval</em> - A string representing the name of the variable that you want to
+assign something to.</p>
+<p><em>rval</em> - The value that you want to set the variable to.</p>
+<p><strong>RETURNS:</strong></p>
+<p>None</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>I'm not sure this is necessary anymore since I reworked logger_logQ. I
+intend to try removing it when I get better test coverage for the messgage
+queueing functions.</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_logmsg_msgloglevel__msg_">utils_logMsg(<em>msgLogLevel, msg</em>)</a>
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+<a href="#utils_callstack__start__">utils_callStack(<em>start</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__"><strong>utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</strong></a></h2>
+<p>This is the main log queueing function. It is usually not called directly 
+but by utils_logMsg when log queueing is enabled. It can be used to log 
+messages through some other function (like logger_logit) without creating a 
+dependency upon it. This function will ``queue'' the log level, message, line 
+number and function name by creating Bash arrays named after the caller. The 
+caller can then dereference the arrays and echo the messages using its own 
+logging implementation.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>logLevel</em> - Integer representing the message log level</p>
+<p><em>msg</em> - Message to queue</p>
+<p><em>logLineNo</em> - Optional but if you are calling this function 
+directly then you should pass the caller's line number. 
+See <em>logFuncName</em>, below for more on why.</p>
+<p><em>logFuncName</em> - Optional but if you are calling this function
+directly then you should pass the caller's function name. This will
+override the default behavior that derives caller's function name from 
+the Bash built-in, ${FUNCNAME[2]}. That default skips the immediate 
+caller which is normally utils_logMsg and since there's not much value 
+in always showing that function as the caller, it skips it and shows
+the function that called utils_logMsg instead. If you're calling this 
+function directly then you probably do want the immediate caller's 
+function name.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If the message was queued</p>
+<p>1 - If the message was not queued</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#utils_qlogmsg_queues_enabled">UTILS_QLOGMSG_QUEUES_ENABLED</a></p>
+<p>Dynamically creates 4 global arrays when it is called. The four arrays 
+will be named after the calling function and indexed in lock-step. 
+These four arrays can be thought of collectively as a message queue, 
+bound together by virtue of the first part of their name.</p>
+<p>${logFuncName}_LOG_LEVEL - Where ${logFuncName} is the name of the
+calling function. Array holding the integers representing the log level 
+of all queued messages.</p>
+<p>${logFuncName}_LOG_MSG - Where ${logFuncName} is the name of the
+calling function. Array holding the messages queued for later logging.</p>
+<p>${logFuncName}_LOG_FUNCNAME - Where ${logFuncName} is the name of the
+calling function. Array holding the names of all the calling functions that
+have queued messages for logging.</p>
+<p>${logFuncName}_LOG_LINENO - Where ${logFuncName} is the name of the
+calling function. Array holding integers representing the line numbers that 
+th calling function called this function from.</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><strong>NOTES:</strong></p>
+<p>Try to avoid passing embedded quotes in the logging messages to
+this function. I'm not sure it supports them in every case. If you're getting 
+``unexpected EOF while looking for matching ``', then most likely, there is an 
+unbalanced quote in your logging message.</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_flushlogq_funcname_">utils_flushLogQ(<em>funcName</em>)</a>
+<a href="#utils_qmsgsfrom_funcname__flushq_">utils_qMsgsFrom(<em>funcName, flushQ</em>)</a>
+<a href="#utils_logmsg_msgloglevel__msg_">utils_logMsg(<em>msgLogLevel, msg</em>)</a>
+<a href="#utils_logit_msgloglevel__msg_">utils_logit(<em>msgLogLevel, msg</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_flushlogq_funcname_"><strong>utils_flushLogQ(<em>funcName</em>)</strong></a></h2>
+<p>Flush all values from the four global arrays that were dynamically created with 
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+This is very often used by 
+<a href="#utils_qmsgsfrom_funcname__flushq_">utils_qMsgsFrom(<em>funcName, flushQ</em>)</a>
+after it moves messages from one queue to another.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>funcName</em> - Can be thought of as a message queue name.
+Technically, it's the function name after which the four global
+message queue arrays are named.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If it attempted to flush a message queue.</p>
+<p>1 - If it did not attempt to flush a message queue because 
+message queueing is disabled.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#utils_qlogmsg_queues_enabled">UTILS_QLOGMSG_QUEUES_ENABLED</a></p>
+<p>Dynamically unsets 4 global arrays when it is called. 
+See 
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+for more information on these arrays.</p>
+<p>${logFuncName}_LOG_LEVEL</p>
+<p>${logFuncName}_LOG_MSG</p>
+<p>${logFuncName}_LOG_FUNCNAME</p>
+<p>${logFuncName}_LOG_LINENO</p>
+<p>
+</p>
+<h2><a name="utils_qmsgsfrom_funcname__flushq_"><strong>utils_qMsgsFrom(<em>funcName, flushQ</em>)</strong></a></h2>
+<p>Move messages from one queue to another. This is used when utils_ function a
+calls utils_ function b and function b creates its own messages. The caller of 
+function a doesn't need to know that function b was called and may have messages
+for him. He only needs to print messages from function a to see all of the  
+messages.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>funcName</em> - Can be thought of as a message queue name.
+Technically, it's the function name after which the four global
+message queue arrays are named.</p>
+<p><em>flushQ</em> - Whether or not to flush the queue that you moved the messages from
+after you move them. If this is false, then messages can be duplicated. 
+Defaults to true.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 -  If messages were moved from one queue to another.</p>
+<p>1 - If no messages were moved.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#utils_qlogmsg_queues_enabled">UTILS_QLOGMSG_QUEUES_ENABLED</a></p>
+<p><a href="#utils_logmsg_queue_messages">UTILS_LOGMSG_QUEUE_MESSAGES</a></p>
+<p>Also uses 4 global arrays, the full names of which are determined by the first 
+argument to this function when it is called. See 
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+for more information on these arrays.</p>
+<p>${logFuncName}_LOG_LEVEL</p>
+<p>${logFuncName}_LOG_MSG</p>
+<p>${logFuncName}_LOG_FUNCNAME</p>
+<p>${logFuncName}_LOG_LINENO</p>
+<p>
+</p>
+<h2><a name="utils_exec_command__sterr_file_"><strong>utils_exec(<em>command, sterr_file</em>)</strong></a></h2>
+<p>A kind of shell wrapper to add an extra layer of fault-tolerance and assist in 
+debugging.  Execute a passed command defensively by first optionally logging it and 
+then checking for success two different ways: first check the command's exit code and 
+then look for a stderr output resulting from the command. If the exit code is non-zero
+or there is a stderr file, the log an error, including the stderr and return 1.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>command</em> - Command to execute</p>
+<p><em>stderr_file</em> - Optional file name for the sterr output to go to (defaults to
+DEFAULT_STDERR)</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If command was successful</p>
+<p>1 - If command was not successful</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><a href="#utils_logit_log_file">UTILS_LOGIT_LOG_FILE</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>This function can be unpredictable if the command you pass it to execute has 
+an echo in it because it does its own internal echo'ing so make sure you test 
+whatever command you pass it.</p>
+<p>Should probably be changed to return the exit code from the command rather
+then just 1 on failure but that would need to be tested.</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>None</p>
+<p>
+</p>
+<h2><a name="utils_filereadable_path_"><strong>utils_fileReadable(<em>path</em>)</strong></a></h2>
+<p>A single function to test for <em>path</em> being not null, a file and readable. If any of 
+these tests fails then use utils_qLogMsg to log which one.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path to file</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>path</em> is a readable file</p>
+<p>1 - If <em>path</em> is not a readable file</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_filereadable_path_">utils_fileReadable(<em>path</em>)</a>, 
+<a href="#utils_filewriteable_path_">utils_fileWriteable(<em>path</em>)</a>, 
+<a href="#utils_canwriteorcreatefile_path_">utils_canWriteOrCreateFile(<em>path</em>)</a>, 
+<a href="#utils_fileexecutable_path_">utils_fileExecutable(<em>path</em>)</a>, 
+<a href="#utils_dirready_path_">utils_dirReady(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_filewriteable_path_"><strong>utils_fileWriteable(<em>path</em>)</strong></a></h2>
+<p>A single function to test for <em>path</em> being not null, a file and writeable. If any of 
+these tests fails then use utils_qLogMsg to log which one failed.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path to file</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>path</em> is a writeable file</p>
+<p>1 - If <em>path</em> is not a writeable file</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_warn">UTILS_QLOG_WARN</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_filewriteable_path_">utils_fileWriteable(<em>path</em>)</a>, 
+<a href="#utils_canwriteorcreatefile_path_">utils_canWriteOrCreateFile(<em>path</em>)</a>, 
+<a href="#utils_fileexecutable_path_">utils_fileExecutable(<em>path</em>)</a>, 
+<a href="#utils_dirready_path_">utils_dirReady(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_canwriteorcreatefile_path_"><strong>utils_canWriteOrCreateFile(<em>path</em>)</strong></a></h2>
+<p>A single function to test for <em>path</em> being not null, and either not already 
+a file or a file that can be written to.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path to file</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>path</em> is either a file that can be written to or not a file at all.</p>
+<p>1 - If <em>path</em> is a non-writeable file</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_warn">UTILS_QLOG_WARN</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_filereadable_path_">utils_fileReadable(<em>path</em>)</a>, 
+<a href="#utils_filewriteable_path_">utils_fileWriteable(<em>path</em>)</a>, 
+<a href="#utils_canwriteorcreatefile_path_">utils_canWriteOrCreateFile(<em>path</em>)</a>, 
+<a href="#utils_fileexecutable_path_">utils_fileExecutable(<em>path</em>)</a>, 
+<a href="#utils_dirready_path_">utils_dirReady(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_fileexecutable_path_"><strong>utils_fileExecutable(<em>path</em>)</strong></a></h2>
+<p>A single function to test for <em>path</em> being not null, a file and executable. If any of 
+these tests fails then use utils_qLogMsg to log which one failed.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path to file</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>path</em> is an executable file</p>
+<p>1 - If <em>path</em> is not an executable file</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_filereadable_path_">utils_fileReadable(<em>path</em>)</a>, 
+<a href="#utils_filewriteable_path_">utils_fileWriteable(<em>path</em>)</a>, 
+<a href="#utils_canwriteorcreatefile_path_">utils_canWriteOrCreateFile(<em>path</em>)</a>, 
+<a href="#utils_dirready_path_">utils_dirReady(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_dirready_path_"><strong>utils_dirReady(<em>path</em>)</strong></a></h2>
+<p>A single function to test for <em>path</em> being not null, a directory and executable. If any of 
+these tests fails then use utils_qLogMsg to log which one failed.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path to directory</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>path</em> is an executable directory</p>
+<p>1 - If <em>path</em> is not an executable directory</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_filereadable_path_">utils_fileReadable(<em>path</em>)</a>, 
+<a href="#utils_filewriteable_path_">utils_fileWriteable(<em>path</em>)</a>, 
+<a href="#utils_canwriteorcreatefile_path_">utils_canWriteOrCreateFile(<em>path</em>)</a>, 
+<a href="#utils_fileexecutable_path_">utils_fileExecutable(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_workfilenamesameext_basisname__surname__workdir_"><strong>utils_workFileNameSameExt(<em>basisName, surname, workDir</em>)</strong></a></h2>
+<p>Create a path name based on an another file name, with the same extension but 
+with a different directory name and a suffix inserted right before the 
+extension, if any.</p>
+<p>Example: Calling this function like so:</p>
+<p><code>tmpFile=$(utils_workFileNameSameExt(&quot;/somedir/thisFile.xml&quot; &quot;-tmp&quot; &quot;/tmp&quot;))</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>/tmp/thisFile-tmp.xml</em></p>
+<p>Example: Calling this function like so:</p>
+<p><code>tmpFile=$(utils_workFileNameSameExt(&quot;/somedir/thisFile&quot; -tmp &quot;/newDir&quot;))</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>/newDir/thisFile-tmp</em></p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>basisName</em> - File name to base the new file name on. 
+Defaults to the name of the currently executing script.</p>
+<p><em>surname</em> - String to add at the end of the new file name, right before
+the last dot preceding the file extension. A file extension is that portion 
+of the file name following the last dot, if there is a dot. If there is no file
+extension, then the surname will be appended to the end of the file name.</p>
+<p><em>workDir</em> - The directory replace the directory portion of basisName with.
+dire</p>
+<p><strong>RETURNS:</strong></p>
+<p>Has both a return value and echoes a string. Check the return value through 
+$? first to be sure that the echoed string was created successfully.</p>
+<p>0 - If <em>path</em> is an executable directory</p>
+<p>1 - If <em>path</em> is not an executable directory</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_similarnamesameext_srcname__surname_">utils_similarNameSameExt(<em>srcName, surname</em>)</a>
+<a href="#utils_replacedirname_pathname__dirname_">utils_replaceDirName(<em>pathName, dirName</em>)</a>
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_samenamedifferentext__path____newext__">utils_sameNameDifferentExt(<em>[path], [newExt]</em>)</a></p>
+<p><a href="#utils_workfilenamedifferentext_basisname__ext__workdir_">utils_workFileNameDifferentExt(<em>basisName, ext, workDir</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_workfilenamedifferentext_basisname__ext__workdir_"><strong>utils_workFileNameDifferentExt(<em>basisName, ext, workDir</em>)</strong></a></h2>
+<p>Create file name based on an another file name but with a different extension.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>basisName</em> - File name to base the new file name on.</p>
+<p><em>ext</em> - New extension to assign to the return value,</p>
+<p><em>workDir</em> - The directory to replace the directory portion of basisName with.</p>
+<p><strong>RETURNS:</strong></p>
+<p>Has both a return value and echoes a string. Check the return value through 
+$? first to be sure that the echoed string was created successfully.</p>
+<p>0 - If <em>path</em> is an executable directory</p>
+<p>1 - If <em>path</em> is not an executable directory</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_samenamedifferentext__path____newext__">utils_sameNameDifferentExt(<em>[path], [newExt]</em>)</a>
+<a href="#utils_replacedirname_pathname__dirname_">utils_replaceDirName(<em>pathName, dirName</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_workfilenamesameext_basisname__surname__workdir_">utils_workFileNameSameExt(<em>basisName, surname, workDir</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_replacedirname_pathname__dirname_"><strong>utils_replaceDirName(<em>pathName, dirName</em>)</strong></a></h2>
+<p>Replace the directory name portion of a path name with a new directory name.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>pathName</em> - Path name containing a directory and file name.</p>
+<p><em>dirName</em> - New directory name to replace the directory name in pathName with.</p>
+<p><strong>RETURNS:</strong></p>
+<p>Echoes pathName with the directory name portion replaced with dirName.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_samenamedifferentext__path____newext__">utils_sameNameDifferentExt(<em>[path], [newExt]</em>)</a>
+<a href="#utils_replacedirname_pathname__dirname_">utils_replaceDirName(<em>pathName, dirName</em>)</a>
+<a href="#utils_workfilenamesameext_basisname__surname__workdir_">utils_workFileNameSameExt(<em>basisName, surname, workDir</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_samenamedifferentext__path____newext__"><strong>utils_sameNameDifferentExt(<em>[path], [newExt]</em>)</strong></a></h2>
+<p>Create file name based on an another file name but with a different newExtension. This 
+function has three different forms:</p>
+<p><strong>First form:</strong> <code>utils_sameNameDifferentExt()</code> - With no arguments, it will create 
+a file name based on the currently executing script with the currently executing 
+process id as the newExtension.</p>
+<p>Example: Calling this function from myscript.sh running as process id '1234' like so:</p>
+<p><code>tmpFile=$(utils_sameNameDifferentExt())</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>myscript.1234</em></p>
+<p><strong>Second form:</strong> <code>utils_sameNameDifferentExt(newExt)</code> - With a single argument, it will 
+create a file name based on the currently executing script with 'newExt' as the
+newExtension.</p>
+<p>Example: If the currently executing script is named myscript.sh and this function 
+is called like so:</p>
+<p><code>tmpFile=$(utils_sameNameDifferentExt(tmp))</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>myscript.tmp</em></p>
+<p><strong>Third form:</strong> utils_sameNameDifferentExt(path, newExt) - With two arguments, 
+it will create a file name based on path with newExt as the newExtension.</p>
+<p>Example: If this function is called like so:</p>
+<p><code>tmpFile=$(utils_sameNameDifferentExt(someScript, tmp))</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>someScript.tmp</em></p>
+<p><strong>ARGUMENTS:</strong></p>
+<p>[<em>path</em>] - Optional file name to base the new file name on. 
+Defaults to the name of the currently executing script.</p>
+<p>[<em>newExt</em>] - Optional newExtension to use to create the new file name.
+Defaults to the process id of the currently executing script.</p>
+<p><strong>RETURNS:</strong></p>
+<p>echoes the newly-created file name</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong> None</p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_similarnamesameext_srcname__surname_">utils_similarNameSameExt(<em>srcName, surname</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_similarnamesameext_srcname__surname_"><strong>utils_similarNameSameExt(<em>srcName, surname</em>)</strong></a></h2>
+<p>Create file name based on an another file name, with the same extension but with a 
+suffix inserted right before the extension, if any.</p>
+<p>Example: Calling this function like so:</p>
+<p><code>tmpFile=$(utils_similarNameSameExt(thisFile.xml, -tmp))</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>thisFile-tmp.xml</em></p>
+<p>Example: Calling this function like so:</p>
+<p><code>tmpFile=$(utils_similarNameSameExt(thisFile, -tmp))</code></p>
+<p><code>tmpFile</code> would be assigned the value: <em>thisFile-tmp</em></p>
+<p>This can be useful to create temporary files based on some existing file without
+changing its extension, which can affect the way some programs process and display
+it. For example, if you want to create an xml file based on an existing one, the 
+new file will still retain xml-like syntax highlighting and colors.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>srcName</em> - File name to base the new file name on. 
+Defaults to the name of the currently executing script.</p>
+<p><em>surname</em> - String to add at the end of the new file name, right before
+the last dot preceding the file extension. A file extension is that portion 
+of the file name following the last dot, if there is a dot. If there is no file
+extension, then the surname will simply be appended to the end of the file 
+name.</p>
+<p><strong>RETURNS:</strong></p>
+<p>echoes the newly-created file name</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_samenamedifferentext__path____newext__">utils_sameNameDifferentExt(<em>[path], [newExt]</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_pathwithoutext_path_"><strong>utils_pathWithoutExt(<em>path</em>)</strong></a></h2>
+<p>Given a path name to a file, extract and return only that portion up to the 
+last dot, if there is a dot.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path name containing a directory, file name and optionally, 
+an extension.</p>
+<p><strong>RETURNS:</strong></p>
+<p>Has both a return value and echoes a string. Check the return value through 
+$? first to be sure that the echoed string was created successfully.</p>
+<p>0 - If succesfully parsed the path (w/o the extension) from <em>path</em></p>
+<p>1 - If failed to parse the path (w/o the extension) from <em>path</em></p>
+<p>Echoes only that portion of path up to the last dot, if there is a dot.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>Perl v5.8 or later
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_filenamewithoutext_path_">utils_fileNameWithoutExt(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_filenamewithoutext_path_"><strong>utils_fileNameWithoutExt(<em>path</em>)</strong></a></h2>
+<p>Given a path name to a file, extract and return only that portion of the file
+name (excluding the directory name) up to the last dot, if there is a dot.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path name containing a directory, file name and optionally, 
+an extension.</p>
+<p><strong>RETURNS:</strong></p>
+<p>Has both a return value and echoes a string. Check the return value through 
+$? first to be sure that the echoed string was created successfully.</p>
+<p>0 - If succesfully parsed the file name from <em>path</em></p>
+<p>1 - If failed to parse the file name from <em>path</em></p>
+<p>Echoes only that portion of path that is the file name up to the last dot, 
+if there is a dot.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>Perl v5.8 or later
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_pathwithoutext_path_">utils_pathWithoutExt(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_fileext_path_"><strong>utils_fileExt(<em>path</em>)</strong></a></h2>
+<p>Given a path name to a file, extract and return only that portion that 
+is the extension. An extenstion is defined here as that portion of the 
+path that follows the last dot, if there is a dot.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>path</em> - Path name containing a directory, file name and optionally, 
+an extension.</p>
+<p><strong>RETURNS:</strong></p>
+<p>Has both a return value and echoes a string. Check the return value through 
+$? first to be sure that the echoed string was created successfully.</p>
+<p>0 - If succesfully parsed the file extension from <em>path</em></p>
+<p>1 - If failed to parse the extentsion from <em>path</em></p>
+<p>Echoes only that portion of path that is the file extension, if there 
+is one.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>Perl v5.8 or later
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>Meant to be called in a subscript with either backticks or $( )'s</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_pathwithoutext_path_">utils_pathWithoutExt(<em>path</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_copyfiles_src__dest__includes_"><strong>utils_copyFiles(<em>src, dest, includes</em>)</strong></a></h2>
+<p>Selectively copy files from one directory to another by
+passing an array of file names to include.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>src</em> - Source directory for the copy</p>
+<p><em>dest</em> - Destination directory for the copy</p>
+<p><em>includes</em> - Name of an array containing the names of files to include
+in the copy.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If succesfully copied files</p>
+<p>1 - If failed to copy files</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_dirready_path_">utils_dirReady(<em>path</em>)</a>
+<a href="#utils_qmsgsfrom_funcname__flushq_">utils_qMsgsFrom(<em>funcName, flushQ</em>)</a>
+<a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a>
+<a href="#utils_exec_command__sterr_file_">utils_exec(<em>command, sterr_file</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>None</p>
+<p>
+</p>
+<h2><a name="utils_rotate_filetorotate__max__separator_"><strong>utils_rotate(<em>fileToRotate, max, separator</em>)</strong></a></h2>
+<p>A file or directory rotator. Given an existing file or directory, like 
+``file.txt'' for example, rename it to ``file.txt.1''. Also rename all 
+similarly named files (``file.txt.1'' becomes ``file.txt.2'', etc.), up to
+the max number. The max + 1 file is removed.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>fileToRotate</em> - Path name containing an existing file or directory to rotate.</p>
+<p><em>max</em> - Maximum number of rotated copies to create.</p>
+<p><em>separator</em> - The characters making-up the separator between the file name
+and the rotation number.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If all files / directories were succesfully rotated.</p>
+<p>1 - If not all files / directories were succesfully rotated.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>None</p>
+<p>
+</p>
+<h2><a name="utils_includesource_file_"><strong>utils_includeSource(<em>file</em>)</strong></a></h2>
+<p>Safely source a file by first making sure it exists. Then, capture and log any
+error if the source command fails.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>file</em> - Path name containing an existing file or directory to rotate.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If successfully source <em>file</em>.</p>
+<p>1 - If failed to source <em>file</em>.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>None</p>
+<p>
+</p>
+<h2><a name="utils_loadconfig_filename_"><strong>utils_loadConfig(<em>fileName</em>)</strong></a></h2>
+<p>An alternative to sourcing a file to include it. Use the read command to load a 
+config file. The config file is expected to have name=value pairs.</p>
+<p>Example: If file.conf contained the following:</p>
+<p>setting1=this
+setting2=${setting1}-and-that</p>
+<p>Then, calling this function like so:</p>
+<p>if <code>loadConfig(file.conf)</code> 
+then
+    : # success
+fi</p>
+<p>Then, a global variable named <code>setting1</code> would be created and assigned the value 
+<em>this</em> and a global variable named <code>setting2</code> would be created and assigned
+the value <em>${setting}-and-that</em>. Note that ${setting1} was not expanded.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>fileName</em> - File name to read</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>fileName</em> exists and was read successfully</p>
+<p>1 - If <em>fileName</em> could not be read</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>Loading a config files through this function is more secure than sourcing 
+it but it lacks parameter and command substitution, although the function could 
+be enhanced to support that, of course.</p>
+<p>Uses the bash IFS built-in to switch to  the equal sign as the internal file 
+separator. This may not work on older versions of bash.</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>None</p>
+<p>
+</p>
+<h2><a name="utils_true_expr_"><strong>utils_true(<em>expr</em>)</strong></a></h2>
+<p>Evaluate an expression for several equivalents of the boolean value <em>true</em> and
+return the appropriate code. All of the following expressions will evaluate
+to <em>true</em>: 1, true (all cases), on (all cases), yes (all cases). Anything else
+will evaluate to <em>false</em> This is to allow for maximum flexibility when editing /
+loading a configuration file.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>expr</em> - Expression to evaluate for <em>true</em></p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>expr</em> evaluates to <em>true</em></p>
+<p>1 - If <em>expr</em> evaluates to <em>false</em></p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_lower_text_">utils_lower(<em>text</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_false_expr_">utils_false(<em>expr</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_false_expr_"><strong>utils_false(<em>expr</em>)</strong></a></h2>
+<p>Evaluate an expression for several equivalents of the boolean value <em>false</em> and
+return the appropriate code. All of the following expressions will evaluate
+to <em>false</em>: 0, false (all cases), off (all cases), no (all cases). Anything else
+will evaluate to <em>true</em> This is to allow for maximum flexibility when editing / 
+loading a configuration file.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>expr</em> - Expression to evaluate for <em>false</em></p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If <em>expr</em> evaluates to <em>false</em></p>
+<p>1 - If <em>expr</em> evaluates to <em>true</em></p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_lower_text_">utils_lower(<em>text</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_true_expr_">utils_true(<em>expr</em>)</a></p>
+<p>
+</p>
+<h2><a name="utils_execsed_sed_com__sed_script__input_file___output_file__"><strong>utils_execsed(<em>sed_com, sed_script, input_file[, output_file]</em>)</strong></a></h2>
+<p>Intended to be called from either 
+<a href="#utils_runsed_sed_script__input_file___output_file__">utils_runsed(<em>sed_script, input_file[, output_file]</em>) </a>
+ or 
+<a href="#utils_gensed_sed_script__input_file___output_file__">utils_gensed(<em>sed_script, input_file[, output_file]</em>) </a>
+ to control usage of the -n option. 
+Run a sed script on an input file and either send the output to stdout
+or create a new file from the output. May also be used on systems where the -i 
+(in-place edit) option is not available or you would just prefer to mimic -i 
+more defensively and get better error handling.</p>
+<p><strong>Example #1:</strong></p>
+<p><code>utils_execsed &quot;sed &quot; &quot;s/REPLACE/WITH/g&quot; infile.txt infile.txt</code></p>
+<p>Executes sed without -n option, using ``s/REPLACE/WITH/g'' as the sed script, 
+infile.txt as the input file and send the output to infile.txt, updating it.</p>
+<p><strong>Example #2:</strong></p>
+<p><code>utils_execsed &quot;sed -n&quot; execsed.sed infile.txt outfile.txt</code></p>
+<p>Executes sed with the -n option, using execsed.sed as the external sed script, 
+infile.txt as the input file and sends the output to outfile.txt</p>
+<p><strong>Example #3:</strong></p>
+<p><code>execsed &quot;sed &quot; execsed.sed infile.txt infile.txt</code></p>
+<p>Executes sed without the -n option, using execsed.sed as the external sed script, 
+infile.txt as the input file and overwrites infile.txt with the output,</p>
+<p><strong>Example #4:</strong></p>
+<p><code>execsed &quot;sed &quot; execsed.sed infile.txt</code></p>
+<p>Executes sed without the -n option, using execsed.sed as the external sed script, 
+infile.txt as the input file and sends the output to stdout.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>sed_com</em> - Quoted sed command with or without '-n' option</p>
+<p><em>sed_script</em> - sed script to run -- external script or string</p>
+<p><em>input_file</em> - Input file</p>
+<p><em>output_file</em> - Optional output file. May be either blank to send the  
+output to stdout or the same as <em>input_file</em> to mimic the GNU sed '-i' in-place 
+edit option.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If successfully executed a sed command or script, an output file 
+was created and it is different from the input file -- determined by ``cmp -s''</p>
+<p>1 - If it was not not possible to create a new, different output file
+from the arguments passed.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p><a href="#item_utils_qlog_debug">UTILS_QLOG_DEBUG</a></p>
+<p><a href="#item_utils_qlog_error">UTILS_QLOG_ERROR</a></p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_qlogmsg_loglevel__logmsg___loglineno____logfuncname__">utils_qLogMsg(<em>logLevel, logMsg, [logLineNo], [logFuncName]</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>This is an adaptation of <em>runsed.sh</em> from <em>sed &amp; awk, Second Edition
+by Dale Dougherty and Arnold Robbins, O'Reilly</em>.</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_runsed_sed_script__input_file___output_file__">utils_runsed(<em>sed_script, input_file[, output_file]</em>) </a>,  
+<a href="#utils_gensed_sed_script__input_file___output_file__">utils_gensed(<em>sed_script, input_file[, output_file]</em>) </a></p>
+<p>
+</p>
+<h2><a name="utils_runsed_sed_script__input_file___output_file__"><strong>utils_runsed(<em>sed_script, input_file[, output_file]</em>)</strong></a></h2>
+<p>Convienence function for making the following call: 
+<code>utils_execsed(&quot;sed&quot;, sed_script, input_file[, output_file]</code>)&gt; 
+This is the function you would call to use <em>utils_execsed</em> fucntion to use sed 
+to transform a file.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>sed_script</em> - sed script to run -- external script or string</p>
+<p><em>input_file</em> - Input file</p>
+<p><em>output_file</em> - Optional output file. May be either blank to send the  
+output to stdout or the same as <em>input_file</em> to mimic the GNU sed '-i' in-place 
+edit option.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If successfully executed a sed command or script, an output file 
+was created and it is different from the input file -- determined by ``cmp -s''</p>
+<p>1 - If it was not not possible to create a new, different output file
+from the arguments passed.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_execsed_sed_com__sed_script__input_file___output_file__">utils_execsed(<em>sed_com, sed_script, input_file[, output_file]</em>) </a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_gensed_sed_script__input_file___output_file__">utils_gensed(<em>sed_script, input_file[, output_file]</em>) </a></p>
+<p>
+</p>
+<h2><a name="utils_gensed_sed_script__input_file___output_file__"><strong>utils_gensed(<em>sed_script, input_file[, output_file]</em>)</strong></a></h2>
+<p>Convienence function for making the following call: 
+<code>utils_execsed(&quot;sed -n&quot;, sed_script, input_file[, output_file]</code>)&gt; 
+This is the function you would call to use <em>utils_execsed</em> fucntion to use sed 
+to create a file fomr an existing file.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>sed_script</em> - sed script to run -- external script or string</p>
+<p><em>input_file</em> - Input file</p>
+<p><em>output_file</em> - Optional output file. May be either blank to send the  
+output to stdout or the same as <em>input_file</em> to mimic the GNU sed '-i' in-place 
+edit option.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If successfully executed a sed command or script, an output file 
+was created and it is different from the input file -- determined by ``cmp -s''</p>
+<p>1 - If it was not not possible to create a new, different output file
+from the arguments passed.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p><a href="#utils_execsed_sed_com__sed_script__input_file___output_file__">utils_execsed(<em>sed_com, sed_script, input_file[, output_file]</em>) </a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_runsed_sed_script__input_file___output_file__">utils_runsed(<em>sed_script, input_file[, output_file]</em>) </a></p>
+<p>
+</p>
+<h2><a name="__utils_versionwalk_rv__tv__ndx_"><strong>__utils_versionWalk(<em>rv, tv, ndx</em>)</strong></a></h2>
+<p>This function is not intended to be called directly. It is used by 
+<a href="#utils_versionsupported_fullrequiresv__fulltestv_">utils_versionSupported(<em>fullRequiresV, fullTestV</em>)</a> 
+to recursively ``walk'' two version arrays of potentially varying size
+and determine if one (tv) is ``less'' than the other (rv). For example, 
+given two arrays defined like so:</p>
+<p><em>tv[0]=1 tv[1]=0 tv[2]=1</em> 
+<em>rv[0]=1 rv[1]=2</em></p>
+<p>The function would determine that the entire <em>tv</em> array is less than
+the <em>rv</em> array by virtue of the second element of <em>tv</em> being less than 
+the second element of <em>rv</em>.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p>This function uses a novel technique to simulate taking two arrays of 
+indeterminent size passed by value. To use it, do not attempt to pass
+them by value by dereferencing them but simply pass it the names of 
+the arrays followed by [@] like soL</p>
+<p><code>__utils_versionWalk tv[@] rv[@] 0</code></p>
+<p><em>tv</em> - Name of the test version array. It's the version that you are
+interested in testing. This should be an array of integers with any 
+number of elements.</p>
+<p><em>rv</em> - Name of the required version array. It's the version that you
+want to compare <em>tv</em> to. Like <em>tv</em>, it should be an array of integers
+with any number of elements.</p>
+<p><em>ndx</em> - The current element in the tv array being tested. Always pass
+0 and let subsequent recursive calls manage this.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If the <em>tv</em> array is determined to be ``less'' than the <em>rv</em>
+array.</p>
+<p>1 - If the <em>tv</em> array is determined to not be ``less'' than the <em>rv</em> 
+array.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>None</p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p><a href="#utils_versionsupported_fullrequiresv__fulltestv_">utils_versionSupported(<em>fullRequiresV, fullTestV</em>) </a>,</p>
+<p>
+</p>
+<h2><a name="utils_versionsupported_fullrequiresv__fulltestv_"><strong>utils_versionSupported(<em>fullRequiresV, fullTestV</em>)</strong></a></h2>
+<p>Compare two version string of potentially varying size and determine 
+if one (<em>fullTestV</em>) is ``less'' than the other (<em>fullRequiresV</em>). 
+For example, given two strings defined like so:</p>
+<p>fullTestV=1.0.1
+fullRequiresV=1.2</p>
+<p>The function would determine that <em>fullTestV</em> is less than 
+ <em>fullRequiresV</em>.</p>
+<p><strong>ARGUMENTS:</strong></p>
+<p><em>fullRequiresV</em> - Name of the required version string. It's the version that you
+want to compare <em>fullTestV</em> to.</p>
+<p><em>fullTestV</em> - Name of the test version string. It's the version that you are
+interested in testing.</p>
+<p><strong>RETURNS:</strong></p>
+<p>0 - If the <em>fullTestV</em> string is determined to be ``less'' than the <em>fullTestV</em>
+string.</p>
+<p>1 - If the <em>fullTestV</em> array is determined to not be ``less'' than the 
+<em>fullRequiresV</em> string.</p>
+<p><strong>GLOBALS USED:</strong></p>
+<p>None</p>
+<p><strong>DEPENDENCIES:</strong></p>
+<p>sed
+<a href="#__utils_versionwalk_rv__tv__ndx_">__utils_versionWalk(<em>rv, tv, ndx</em>)</a></p>
+<p><strong>NOTES:</strong></p>
+<p>None</p>
+<p><strong>BUGS:</strong></p>
+<p>None</p>
+<p><strong>SEE ALSO:</strong></p>
+<p>None</p>
+
+</body>
+
+</html>
