@@ -33,6 +33,11 @@ mail.pl
 A Perl script that uses the following dependencies to make
 the task of sending an email with attachments easier:
 
+test/
+----
+Yes, there are some tests, mostly for utils.sh. You will need
+Kate Ward's shunit to run them: https://code.google.com/p/shunit2/
+
 Mail-Sendmail-0.79
 MIME-Lite-3.029
 Email-Date-Format-1.002
