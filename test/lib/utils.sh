@@ -1012,10 +1012,10 @@ oneTimeSetUp()
 
     TEST_UTILS_TEST_DIR2="${test_utils_BASE_DIR}/testdir2"
 
-    TEST_UTILS_EXEC_SCRIPT="${test_utils_BASE_DIR}/test_utils_exec_external.sh"
-    TEST_UTILS_EXEC_ARG1="${test_utils_BASE_DIR}/test_utils_exec_input.txt"
-    TEST_UTILS_EXEC_STDOUT="${test_utils_BASE_DIR}/test_utils_exec_external.stdout"
-    TEST_UTILS_EXEC_STDERR="${test_utils_BASE_DIR}/test_utils_exec_external.stderr"
+    TEST_UTILS_EXEC_SCRIPT="${test_utils_BASE_DIR}/utils_exec_external._sh"
+    TEST_UTILS_EXEC_ARG1="${test_utils_BASE_DIR}/utils_exec_input.txt"
+    TEST_UTILS_EXEC_STDOUT="${test_utils_BASE_DIR}/utils_exec_external.stdout"
+    TEST_UTILS_EXEC_STDERR="${test_utils_BASE_DIR}/utils_exec_external.stderr"
 
 
     # Test cases for path, file name and file extension parsing
@@ -1076,12 +1076,29 @@ tearDown()
     #rm -f "${TEST_UTILS_EXEC_STDERR}"
 }
 
-test_utils_SUBJECT_BASE_NAME="../../lib/utils.sh"
+# Use this technique to clear-out the positional args after 
+# loading them because shunit2 has a strange error whenever 
+# it is sourced when there is a residual arg. 
+if [ "x${1}" = "x" ]
+then
+    SHUNIT2_HOME="../../../shunit2"
+else
+    SHUNIT2_HOME="${1}"
+    shift
+fi
+
+if [ "x${1}" = "x" ]
+then
+    test_utils_SUBJECT_BASE_NAME="../../lib/$(basename $0)"
+else
+    test_utils_SUBJECT_BASE_NAME="${1}"
+    shift
+fi
+
 test_utils_SUBJECT_BASE_DIR=$( cd $(dirname ${test_utils_SUBJECT_BASE_NAME}) ; pwd -P )
-#source ../../lib/utils.sh
 source ${test_utils_SUBJECT_BASE_NAME}
 
 # load and run shUnit2
-[ -n "${ZSH_VERSION:-}" ] && SHUNIT_PARENT=$0
-#. ../shunit2-2.1.6/src/shunit2
-. /bin/shunit/shunit2
+[ -n "${ZSH_VERSION:-}" ] && SHUNIT_PARENT=${0}
+
+source "${SHUNIT2_HOME}/src/shunit2"
