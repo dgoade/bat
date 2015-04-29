@@ -86,7 +86,7 @@ tearDown()
 # it is sourced when there is a residual arg. 
 if [ "x${1}" = "x" ]
 then
-    SHUNIT2_HOME="../../../shunit2"
+    SHUNIT2_HOME="../../shunit2"
 else
     echo "using ${1} for SHUNIT_HOME"
     SHUNIT2_HOME="${1}"

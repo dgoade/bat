@@ -1081,7 +1081,7 @@ tearDown()
 # it is sourced when there is a residual arg. 
 if [ "x${1}" = "x" ]
 then
-    SHUNIT2_HOME="../../../shunit2"
+    SHUNIT2_HOME="../../shunit2"
 else
     SHUNIT2_HOME="${1}"
     shift
