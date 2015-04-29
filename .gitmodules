@@ -1,3 +1,6 @@
 [submodule "shunit2"]
 	path = shunit2
 	url = https://github.com/zandev/shunit2.git
+[submodule "shunit"]
+	path = shunit
+	url = https://github.com/akesterson/shunit.git
