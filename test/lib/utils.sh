@@ -21,7 +21,7 @@ test_utils_versionSupported()
 
     rv="1.1"
 
-    v[0]="x"
+    v[0]=""
     v[1]="0"
     v[2]="0."
     v[3]="0.0"
