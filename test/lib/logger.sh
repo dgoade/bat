@@ -81,13 +81,33 @@ tearDown()
     :
 }
 
-LOGGER_LIB_DIR="../../lib"
-#source ../../lib/utils.sh
-#source ../../lib/log4bash.sh
-source ../../lib/logger.sh
+# Use this technique to clear-out the positional args after 
+# loading them because shunit2 has a strange error whenever 
+# it is sourced when there is a residual arg. 
+if [ "x${1}" = "x" ]
+then
+    SHUNIT2_HOME="../../../shunit2"
+else
+    echo "using ${1} for SHUNIT_HOME"
+    SHUNIT2_HOME="${1}"
+    shift
+fi
+
+if [ "x${1}" = "x" ]
+then
+    test_SUBJECT_BASE_NAME="../../lib/$(basename $0)"
+else
+    echo "using ${1} for test_SUBJECT_BASE_NAME"
+    test_SUBJECT_BASE_NAME="${1}"
+    shift
+fi
+
+test_SUBJECT_BASE_DIR=$( cd $(dirname ${test_SUBJECT_BASE_NAME}) ; pwd -P )
+LOGGER_LIB_DIR=${test_SUBJECT_BASE_DIR}
+#echo sourcing "${test_SUBJECT_BASE_NAME}"
+. ${test_SUBJECT_BASE_NAME}
 
 # load and run shUnit2
 [ -n "${ZSH_VERSION:-}" ] && SHUNIT_PARENT=$0
-#. ../shunit2-2.1.6/src/shunit2
-. /bin/shunit/shunit2
-
+#"echo sourcing ${SHUNIT2_HOME}/src/shunit2"
+source "${SHUNIT2_HOME}/src/shunit2"
