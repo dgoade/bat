@@ -57,4 +57,4 @@ run_tests()
 run_tests
 FAILURES=${?}
 echo "Test suites with failures=${FAILURES}"
-exit ${FAILRES}
+exit ${FAILURES}
