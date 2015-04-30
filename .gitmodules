@@ -4,3 +4,6 @@
 [submodule "shunit"]
 	path = shunit
 	url = https://github.com/akesterson/shunit.git
+[submodule "cmdarg"]
+	path = cmdarg
+	url = https://github.com/akesterson/cmdarg
