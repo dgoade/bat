@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SHUNIT2_DEFAULT_HOME=$(find . -name "shunit2" -type d | head -1)
-SHUNIT2_DEFAULT_PATH=$( cd ${SHUNIT2_DEFAULT_HOME} ; pwd -P )
-SHUNIT2_HOME=${1:-${SHUNIT2_DEFAULT_PATH}}
+#SHUNIT2_DEFAULT_HOME=$(find . -name "shunit2" -type d | head -1)
+#SHUNIT2_DEFAULT_PATH=$( cd ${SHUNIT2_DEFAULT_HOME} ; pwd -P )
+#SHUNIT2_HOME=${1:-${SHUNIT2_DEFAULT_PATH}}
 
 FAILURES=0
 
