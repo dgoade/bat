@@ -88,7 +88,7 @@ if [ "x${1}" = "x" ]
 then
     SHUNIT2_HOME="../../shunit2"
 else
-    echo "using ${1} for SHUNIT_HOME"
+    echo "using ${1} for SHUNIT2_HOME"
     SHUNIT2_HOME="${1}"
     shift
 fi
@@ -97,10 +97,11 @@ if [ "x${1}" = "x" ]
 then
     test_SUBJECT_BASE_NAME="../../lib/$(basename $0)"
 else
-    echo "using ${1} for test_SUBJECT_BASE_NAME"
     test_SUBJECT_BASE_NAME="${1}"
     shift
 fi
+
+exit
 
 test_SUBJECT_BASE_DIR=$( cd $(dirname ${test_SUBJECT_BASE_NAME}) ; pwd -P )
 LOGGER_LIB_DIR=${test_SUBJECT_BASE_DIR}

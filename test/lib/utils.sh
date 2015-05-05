@@ -1,13 +1,8 @@
 #!/bin/bash
 #
-# Author: kate.ward@forestent.com (Kate Ward)
+# Author: dgoade@gmail.com (David Goade)
 #
-# Example unit test for the mkdir command.
-#
-# There are times when an existing shell script needs to be tested. In this
-# example, we will test several aspects of the the mkdir command, but the
-# techniques could be used for any existing shell script.
-
+# Test the utils library
 #-----------------------------------------------------------------------------
 # suite tests
 #
@@ -1076,12 +1071,14 @@ tearDown()
     #rm -f "${TEST_UTILS_EXEC_STDERR}"
 }
 
+test_utils_TEST_BASE_DIR=$( cd $(dirname ${BASH_SOURCE}) ; pwd -P )
+
 # Use this technique to clear-out the positional args after 
 # loading them because shunit2 has a strange error whenever 
 # it is sourced when there is a residual arg. 
 if [ "x${1}" = "x" ]
 then
-    SHUNIT2_HOME="../../shunit2"
+    SHUNIT2_HOME="${test_utils_TEST_BASE_DIR}/../../shunit2"
 else
     SHUNIT2_HOME="${1}"
     shift
@@ -1089,7 +1086,7 @@ fi
 
 if [ "x${1}" = "x" ]
 then
-    test_utils_SUBJECT_BASE_NAME="../../lib/$(basename $0)"
+    test_utils_SUBJECT_BASE_NAME="${test_utils_TEST_BASE_DIR}/../../lib/$(basename $0)"
 else
     test_utils_SUBJECT_BASE_NAME="${1}"
     shift
