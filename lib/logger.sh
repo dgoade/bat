@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare LOGGER_DEFAULT_LOG_LEVEL=1
+declare LOGGER_DEFAULT_LOG_LEVEL=4
 
 logger_showVars ()
 {
@@ -63,10 +63,17 @@ logger_init ()
     declare -i RVAL=0
     declare LOG_DIR
 
-    LOGGER_BASE_NAME=$(basename $0)
-    LOGGER_BASE_DIR=$( cd $(dirname ${LOGGER_BASE_NAME}) ; pwd -P )
-
-    LOGGER_LIB_DIR=$(logger_libdir "${LOGGER_LIB_DIR}")
+    # Is BAT_PATH set?
+    if [ "x${BAT_PATH}" = "x" ]
+    then
+        LOGGER_BASE_NAME=$(basename $0)
+        LOGGER_BASE_DIR=$( cd $(dirname ${LOGGER_BASE_NAME}) ; pwd -P )
+        LOGGER_LIB_DIR=$(logger_libdir "${LOGGER_LIB_DIR}")
+    else
+        LOGGER_BASE_NAME=logger.sh
+        LOGGER_BASE_DIR=${BAT_PATH}/lib
+        LOGGER_LIB_DIR=${BAT_PATH}/lib
+    fi
 
     if [ -f ${LOGGER_LIB_DIR}/utils.sh ] 
     then
